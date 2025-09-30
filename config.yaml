@@ -1,0 +1,36 @@
+seed: 42
+device: "auto"          # auto|cuda|cpu
+task: "burgers1d"
+
+data:
+  h5_path: "data/raw/burgers_train.h5"   # пример
+  val_h5_path: null
+  batch_size: 256
+  collocation:
+    n_points: 20000
+    fixed_file: "data/splits/colloc_seed42.npy"   # будет создан, если нет
+
+model:
+  widths: [64, 64, 64]
+  spectral_norm: false
+
+train:
+  epochs: 200
+  lr: 1e-3
+
+loss:
+  data: "huber"          # mse|l1|huber
+  huber_delta: 0.5
+  physics_weight: 1.0
+  adaptive: false        # просто флаг-заглушка
+
+eval:
+  metrics: ["mae","rmse"]
+logging:
+  save_best: true
+  csv_every: 1
+  make_plots: true
+  plots:
+    curves: ["tr_total","vl_total","tr_data","vl_data","tr_phys","vl_phys"]
+    dpi: 200
+    filename: "curve.png"          # каждая эпоха
